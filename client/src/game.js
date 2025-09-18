@@ -9,9 +9,35 @@ class ShadowMazeGame {
         this.ctx = this.canvas.getContext('2d');
         
         // Game state
-        this.gameState = 'start'; // start, playing, victory, defeat
+        this.gameState = 'start'; // start, difficulty, playing, victory, defeat
         this.gameTime = 60; // seconds
         this.gameTimer = null;
+        this.selectedDifficulty = 'medium';
+        
+        // Difficulty settings
+        this.difficultySettings = {
+            easy: {
+                name: '簡單 / Easy',
+                timeLimit: 90,
+                mazeSizeMultiplier: 0.7,
+                lightRadius: 120,
+                playerSpeed: 140
+            },
+            medium: {
+                name: '中等 / Medium',
+                timeLimit: 60,
+                mazeSizeMultiplier: 1.0,
+                lightRadius: 100,
+                playerSpeed: 120
+            },
+            hard: {
+                name: '困難 / Hard',
+                timeLimit: 40,
+                mazeSizeMultiplier: 1.3,
+                lightRadius: 80,
+                playerSpeed: 100
+            }
+        };
         
         // Game objects
         this.maze = null;
@@ -64,36 +90,61 @@ class ShadowMazeGame {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         
-        // Calculate maze dimensions based on screen size
-        this.mazeWidth = Math.floor(this.canvas.width / this.cellSize);
-        this.mazeHeight = Math.floor(this.canvas.height / this.cellSize);
+        // Calculate base maze dimensions
+        const baseWidth = Math.floor(this.canvas.width / this.cellSize);
+        const baseHeight = Math.floor(this.canvas.height / this.cellSize);
+        
+        // Apply difficulty multiplier
+        const difficulty = this.difficultySettings[this.selectedDifficulty];
+        this.mazeWidth = Math.floor(baseWidth * difficulty.mazeSizeMultiplier);
+        this.mazeHeight = Math.floor(baseHeight * difficulty.mazeSizeMultiplier);
         
         // Ensure odd dimensions for proper maze generation
         if (this.mazeWidth % 2 === 0) this.mazeWidth--;
         if (this.mazeHeight % 2 === 0) this.mazeHeight--;
         
-        // Minimum maze size
+        // Minimum and maximum maze size
         this.mazeWidth = Math.max(this.mazeWidth, 21);
         this.mazeHeight = Math.max(this.mazeHeight, 15);
+        this.mazeWidth = Math.min(this.mazeWidth, 101);
+        this.mazeHeight = Math.min(this.mazeHeight, 71);
     }
     
     /**
      * Setup UI event listeners
      */
     setupUI() {
-        // Start button
+        // Start button - shows difficulty selection
         document.getElementById('startButton').addEventListener('click', () => {
-            this.startGame();
+            this.showDifficultySelection();
+        });
+        
+        // Difficulty buttons
+        document.getElementById('easyButton').addEventListener('click', () => {
+            this.selectDifficulty('easy');
+        });
+        
+        document.getElementById('mediumButton').addEventListener('click', () => {
+            this.selectDifficulty('medium');
+        });
+        
+        document.getElementById('hardButton').addEventListener('click', () => {
+            this.selectDifficulty('hard');
+        });
+        
+        // Back button
+        document.getElementById('backButton').addEventListener('click', () => {
+            this.showScreen('startScreen');
         });
         
         // Play again button
         document.getElementById('playAgainButton').addEventListener('click', () => {
-            this.startGame();
+            this.showDifficultySelection();
         });
         
         // Try again button
         document.getElementById('tryAgainButton').addEventListener('click', () => {
-            this.startGame();
+            this.showDifficultySelection();
         });
         
         // Mute button
@@ -105,31 +156,56 @@ class ShadowMazeGame {
     }
     
     /**
-     * Start a new game
+     * Show difficulty selection screen
+     */
+    showDifficultySelection() {
+        this.showScreen('difficultyScreen');
+    }
+    
+    /**
+     * Select difficulty and start game
+     */
+    selectDifficulty(difficulty) {
+        this.selectedDifficulty = difficulty;
+        console.log(`Selected difficulty: ${difficulty}`);
+        this.startGame();
+    }
+    
+    /**
+     * Start a new game with selected difficulty
      */
     startGame() {
-        console.log('Starting new game...');
+        console.log(`Starting new game on ${this.selectedDifficulty} difficulty...`);
+        
+        // Get difficulty settings
+        const difficulty = this.difficultySettings[this.selectedDifficulty];
         
         // Reset game state
         this.gameState = 'playing';
-        this.gameTime = 60;
+        this.gameTime = difficulty.timeLimit;
+        
+        // Recalculate maze size for current difficulty
+        this.resizeCanvas();
         
         // Generate new maze
         this.maze = new MazeGenerator(this.mazeWidth, this.mazeHeight);
         this.maze.generate();
         
-        // Create player at maze start
+        // Create player at maze start with difficulty-based properties
         const startPos = this.maze.getStartPosition();
         this.player = {
             x: startPos.x * this.cellSize + this.cellSize / 2,
             y: startPos.y * this.cellSize + this.cellSize / 2,
             radius: 8,
-            speed: 120, // pixels per second
-            lightRadius: 100
+            speed: difficulty.playerSpeed,
+            lightRadius: difficulty.lightRadius
         };
         
         // Setup lighting
         this.lighting.setup(this.canvas.width, this.canvas.height);
+        
+        // Update difficulty display
+        document.getElementById('difficultyDisplay').textContent = difficulty.name;
         
         // Start game timer
         this.startTimer();

@@ -210,6 +210,107 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Difficulty Selection Styles */
+.difficulty-title {
+    font-size: 2rem;
+    color: #ff6b35;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+}
+
+.difficulty-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.difficulty-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: auto;
+}
+
+.difficulty-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.difficulty-button.easy {
+    border-color: #4ade80;
+    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.2);
+}
+
+.difficulty-button.easy:hover {
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.3);
+}
+
+.difficulty-button.medium {
+    border-color: #f59e0b;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+}
+
+.difficulty-button.medium:hover {
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+}
+
+.difficulty-button.hard {
+    border-color: #ef4444;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+}
+
+.difficulty-button.hard:hover {
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+}
+
+.difficulty-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.difficulty-desc {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.back-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #666;
+    color: #ccc;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* HUD Difficulty Display */
+.hud-difficulty {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px 16px;
+    border-radius: 16px;
+    border: 1px solid #666;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
 /* Mobile Controls */
 .mobile-only {
     display: none;
@@ -282,8 +383,26 @@ body {
         top: 10px;
     }
     
+    .hud-difficulty {
+        top: 10px;
+        right: 10px;
+        font-size: 0.8rem;
+    }
+    
     .controls-hint {
         display: none;
+    }
+    
+    .difficulty-title {
+        font-size: 1.5rem;
+    }
+    
+    .difficulty-buttons {
+        gap: 0.8rem;
+    }
+    
+    .difficulty-button {
+        padding: 0.8rem 1rem;
     }
 }
 

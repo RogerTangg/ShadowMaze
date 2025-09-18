@@ -24,10 +24,35 @@
                 </div>
             </div>
             
+            <!-- Difficulty Selection Screen -->
+            <div id="difficultyScreen" class="screen">
+                <div class="screen-content">
+                    <h2 class="difficulty-title">選擇難度 / Choose Difficulty</h2>
+                    <div class="difficulty-buttons">
+                        <button id="easyButton" class="difficulty-button easy">
+                            <span class="difficulty-name">簡單 / Easy</span>
+                            <span class="difficulty-desc">Small maze, 90 seconds</span>
+                        </button>
+                        <button id="mediumButton" class="difficulty-button medium">
+                            <span class="difficulty-name">中等 / Medium</span>
+                            <span class="difficulty-desc">Medium maze, 60 seconds</span>
+                        </button>
+                        <button id="hardButton" class="difficulty-button hard">
+                            <span class="difficulty-name">困難 / Hard</span>
+                            <span class="difficulty-desc">Large maze, 40 seconds</span>
+                        </button>
+                    </div>
+                    <button id="backButton" class="back-button">← Back</button>
+                </div>
+            </div>
+            
             <!-- Game HUD -->
             <div id="gameHUD" class="screen">
                 <div class="hud-timer">
                     <span id="timeDisplay">60</span>
+                </div>
+                <div class="hud-difficulty">
+                    <span id="difficultyDisplay">Medium</span>
                 </div>
                 <div class="hud-controls">
                     <div class="controls-hint">
