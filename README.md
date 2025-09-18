@@ -113,12 +113,13 @@ Navigate through randomly generated mazes using the limited light around your ch
   - Wall Following: Moving along walls helps avoid getting lost  
 - **時間管理**: 合理分配探索時間，避免在死路浪費太多時間
   - Time Management: Allocate exploration time wisely, avoid spending too much time in dead ends
+<!--
 
 ## 📝 開發團隊 Development Team
 
 由Replit Agent開發，專為提供沉浸式迷宮探索體驗而設計。
 
-Developed by Replit Agent, designed specifically to provide an immersive maze exploration experience.
+Developed by Replit Agent, designed specifically to provide an immersive maze exploration experience.-->
 
 ## 📄 授權條款 License
 
@@ -127,4 +128,4 @@ This project is for educational and entertainment purposes only.
 
 ---
 
-🌟 **開始你的迷宮冒險吧！Start your maze adventure now!** 🌟
+<!-- 🌟 **開始你的迷宮冒險吧！Start your maze adventure now!** 🌟 -->
