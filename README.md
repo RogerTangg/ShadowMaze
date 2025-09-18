@@ -119,13 +119,14 @@ Navigate through randomly generated mazes using the limited light around your ch
 
 由Replit Agent開發，專為提供沉浸式迷宮探索體驗而設計。
 
-Developed by Replit Agent, designed specifically to provide an immersive maze exploration experience.-->
+Developed by Replit Agent, designed specifically to provide an immersive maze exploration experience.
+-->
 
+<!--
 ## 📄 授權條款 License
 
 本專案僅供學習和娛樂使用。
 This project is for educational and entertainment purposes only.
-
----
+-->
 
 <!-- 🌟 **開始你的迷宮冒險吧！Start your maze adventure now!** 🌟 -->
