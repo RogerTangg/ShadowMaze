@@ -14,6 +14,10 @@ class ShadowMazeGame {
         this.gameTimer = null;
         this.selectedDifficulty = 'medium';
         
+        // Movement timing
+        this.lastMoveTime = 0;
+        this.moveInterval = 150; // milliseconds between moves for continuous movement
+        
         // Difficulty settings
         this.difficultySettings = {
             easy: {
@@ -21,21 +25,21 @@ class ShadowMazeGame {
                 timeLimit: 90,
                 mazeSizeMultiplier: 0.4,
                 lightRadius: 120,
-                playerSpeed: 1
+                moveInterval: 200 // slower movement for easy
             },
             medium: {
                 name: '中等 / Medium',
                 timeLimit: 60,
                 mazeSizeMultiplier: 0.6,
                 lightRadius: 100,
-                playerSpeed: 1
+                moveInterval: 150 // medium movement speed
             },
             hard: {
                 name: '困難 / Hard',
                 timeLimit: 40,
                 mazeSizeMultiplier: 0.8,
                 lightRadius: 80,
-                playerSpeed: 1
+                moveInterval: 100 // faster movement for hard
             }
         };
         
@@ -183,6 +187,7 @@ class ShadowMazeGame {
         // Reset game state
         this.gameState = 'playing';
         this.gameTime = difficulty.timeLimit;
+        this.lastMoveTime = 0; // Reset movement timer
         
         // Recalculate maze size for current difficulty
         this.resizeCanvas();
@@ -197,9 +202,12 @@ class ShadowMazeGame {
             x: startPos.x * this.cellSize + this.cellSize / 2,
             y: startPos.y * this.cellSize + this.cellSize / 2,
             radius: 8,
-            speed: difficulty.playerSpeed, // pixels per frame
             lightRadius: difficulty.lightRadius
         };
+        
+        // Set movement interval based on difficulty
+        this.moveInterval = difficulty.moveInterval;
+        this.lastMoveTime = 0;
         
         // Setup lighting
         this.lighting.setup(this.canvas.width, this.canvas.height);
@@ -297,50 +305,57 @@ class ShadowMazeGame {
      * Update player position and handle collisions
      */
     updatePlayer(deltaTime) {
-        const moveSpeed = this.player.speed; // pixels per frame
+        const currentTime = Date.now();
+        
+        // Check if enough time has passed for the next move
+        if (currentTime - this.lastMoveTime < this.moveInterval) {
+            return;
+        }
+        
         let newX = this.player.x;
         let newY = this.player.y;
         let hasMoved = false;
         
-        // Get input from controls - move exactly 1 pixel per frame for smooth movement
+        // Get input from controls - move one grid cell at a time
         if (this.controls.isPressed('up')) {
-            const testY = newY - moveSpeed;
+            const testY = newY - this.cellSize;
             if (this.canMoveTo(newX, testY)) {
                 newY = testY;
                 hasMoved = true;
             }
         }
-        if (this.controls.isPressed('down')) {
-            const testY = newY + moveSpeed;
+        else if (this.controls.isPressed('down')) {
+            const testY = newY + this.cellSize;
             if (this.canMoveTo(newX, testY)) {
                 newY = testY;
                 hasMoved = true;
             }
         }
-        if (this.controls.isPressed('left')) {
-            const testX = newX - moveSpeed;
+        else if (this.controls.isPressed('left')) {
+            const testX = newX - this.cellSize;
             if (this.canMoveTo(testX, newY)) {
                 newX = testX;
                 hasMoved = true;
             }
         }
-        if (this.controls.isPressed('right')) {
-            const testX = newX + moveSpeed;
+        else if (this.controls.isPressed('right')) {
+            const testX = newX + this.cellSize;
             if (this.canMoveTo(testX, newY)) {
                 newX = testX;
                 hasMoved = true;
             }
         }
         
-        // Update player position
+        // Update player position and move timer
         if (hasMoved) {
             this.player.x = newX;
             this.player.y = newY;
+            this.lastMoveTime = currentTime;
             
-            // Play movement sound occasionally
-            if (Math.random() < 0.02) { // 2% chance per frame
-                this.audio.playSound('hit', 0.1);
-            }
+            // Play movement sound
+            this.audio.playSound('hit', 0.15);
+            
+            console.log(`Player moved to grid position: (${Math.floor(newX / this.cellSize)}, ${Math.floor(newY / this.cellSize)})`);
         }
     }
     
