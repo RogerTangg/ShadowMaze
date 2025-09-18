@@ -14,9 +14,14 @@ class ShadowMazeGame {
         this.gameTimer = null;
         this.selectedDifficulty = 'medium';
         
-        // Movement timing
-        this.lastMoveTime = 0;
-        this.moveInterval = 150; // milliseconds between moves for continuous movement
+        // Movement state
+        this.isMoving = false;
+        this.moveStartTime = 0;
+        this.moveDuration = 200; // milliseconds for smooth movement
+        this.moveStartPos = { x: 0, y: 0 };
+        this.moveTargetPos = { x: 0, y: 0 };
+        this.lastInputTime = 0;
+        this.inputDelay = 180; // milliseconds between accepting new movement inputs
         
         // Difficulty settings
         this.difficultySettings = {
@@ -25,21 +30,21 @@ class ShadowMazeGame {
                 timeLimit: 90,
                 mazeSizeMultiplier: 0.4,
                 lightRadius: 120,
-                moveInterval: 200 // slower movement for easy
+                moveDuration: 250 // slower movement for easy
             },
             medium: {
                 name: '中等 / Medium',
                 timeLimit: 60,
                 mazeSizeMultiplier: 0.6,
                 lightRadius: 100,
-                moveInterval: 150 // medium movement speed
+                moveDuration: 200 // medium movement speed
             },
             hard: {
                 name: '困難 / Hard',
                 timeLimit: 40,
                 mazeSizeMultiplier: 0.8,
                 lightRadius: 80,
-                moveInterval: 100 // faster movement for hard
+                moveDuration: 150 // faster movement for hard
             }
         };
         
@@ -91,8 +96,18 @@ class ShadowMazeGame {
      * Setup canvas dimensions
      */
     resizeCanvas() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        // Set canvas to a reasonable fixed size that works well centered
+        const maxWidth = Math.min(window.innerWidth * 0.9, 1280);
+        const maxHeight = Math.min(window.innerHeight * 0.9, 800);
+        
+        // Maintain 16:10 aspect ratio
+        if (maxWidth / maxHeight > 1.6) {
+            this.canvas.width = maxHeight * 1.6;
+            this.canvas.height = maxHeight;
+        } else {
+            this.canvas.width = maxWidth;
+            this.canvas.height = maxWidth / 1.6;
+        }
         
         // Calculate base maze dimensions
         const baseWidth = Math.floor(this.canvas.width / this.cellSize);
@@ -187,7 +202,8 @@ class ShadowMazeGame {
         // Reset game state
         this.gameState = 'playing';
         this.gameTime = difficulty.timeLimit;
-        this.lastMoveTime = 0; // Reset movement timer
+        this.isMoving = false; // Reset movement state
+        this.lastInputTime = 0;
         
         // Recalculate maze size for current difficulty
         this.resizeCanvas();
@@ -205,9 +221,10 @@ class ShadowMazeGame {
             lightRadius: difficulty.lightRadius
         };
         
-        // Set movement interval based on difficulty
-        this.moveInterval = difficulty.moveInterval;
-        this.lastMoveTime = 0;
+        // Set movement speed based on difficulty
+        this.moveDuration = difficulty.moveDuration;
+        this.isMoving = false;
+        this.lastInputTime = 0;
         
         // Setup lighting
         this.lighting.setup(this.canvas.width, this.canvas.height);
@@ -302,60 +319,78 @@ class ShadowMazeGame {
     }
     
     /**
-     * Update player position and handle collisions
+     * Update player position with smooth interpolated movement
      */
     updatePlayer(deltaTime) {
         const currentTime = Date.now();
         
-        // Check if enough time has passed for the next move
-        if (currentTime - this.lastMoveTime < this.moveInterval) {
+        // Handle smooth movement interpolation
+        if (this.isMoving) {
+            const elapsed = currentTime - this.moveStartTime;
+            const progress = Math.min(elapsed / this.moveDuration, 1);
+            
+            // Use easeOut for smooth deceleration
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            
+            // Interpolate position
+            this.player.x = this.moveStartPos.x + (this.moveTargetPos.x - this.moveStartPos.x) * easeProgress;
+            this.player.y = this.moveStartPos.y + (this.moveTargetPos.y - this.moveStartPos.y) * easeProgress;
+            
+            // Check if movement is complete
+            if (progress >= 1) {
+                this.player.x = this.moveTargetPos.x;
+                this.player.y = this.moveTargetPos.y;
+                this.isMoving = false;
+            }
+            
+            return; // Don't accept new input while moving
+        }
+        
+        // Check for new movement input
+        if (currentTime - this.lastInputTime < this.inputDelay) {
             return;
         }
         
-        let newX = this.player.x;
-        let newY = this.player.y;
-        let hasMoved = false;
+        let targetX = this.player.x;
+        let targetY = this.player.y;
+        let hasNewMove = false;
         
         // Get input from controls - move one grid cell at a time
         if (this.controls.isPressed('up')) {
-            const testY = newY - this.cellSize;
-            if (this.canMoveTo(newX, testY)) {
-                newY = testY;
-                hasMoved = true;
+            targetY = this.player.y - this.cellSize;
+            if (this.canMoveTo(this.player.x, targetY)) {
+                hasNewMove = true;
             }
         }
         else if (this.controls.isPressed('down')) {
-            const testY = newY + this.cellSize;
-            if (this.canMoveTo(newX, testY)) {
-                newY = testY;
-                hasMoved = true;
+            targetY = this.player.y + this.cellSize;
+            if (this.canMoveTo(this.player.x, targetY)) {
+                hasNewMove = true;
             }
         }
         else if (this.controls.isPressed('left')) {
-            const testX = newX - this.cellSize;
-            if (this.canMoveTo(testX, newY)) {
-                newX = testX;
-                hasMoved = true;
+            targetX = this.player.x - this.cellSize;
+            if (this.canMoveTo(targetX, this.player.y)) {
+                hasNewMove = true;
             }
         }
         else if (this.controls.isPressed('right')) {
-            const testX = newX + this.cellSize;
-            if (this.canMoveTo(testX, newY)) {
-                newX = testX;
-                hasMoved = true;
+            targetX = this.player.x + this.cellSize;
+            if (this.canMoveTo(targetX, this.player.y)) {
+                hasNewMove = true;
             }
         }
         
-        // Update player position and move timer
-        if (hasMoved) {
-            this.player.x = newX;
-            this.player.y = newY;
-            this.lastMoveTime = currentTime;
+        // Start new movement
+        if (hasNewMove) {
+            this.moveStartPos = { x: this.player.x, y: this.player.y };
+            this.moveTargetPos = { x: targetX, y: targetY };
+            this.moveStartTime = currentTime;
+            this.lastInputTime = currentTime;
+            this.isMoving = true;
             
             // Play movement sound
             this.audio.playSound('hit', 0.15);
-            
-            console.log(`Player moved to grid position: (${Math.floor(newX / this.cellSize)}, ${Math.floor(newY / this.cellSize)})`);
         }
     }
     

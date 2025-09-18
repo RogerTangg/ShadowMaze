@@ -21,15 +21,21 @@ body {
     width: 100vw;
     height: 100vh;
     background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #gameCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    position: relative;
+    width: min(100vw, 100vh * 1.6); /* 16:10 aspect ratio */
+    height: min(100vh, 100vw / 1.6);
+    max-width: 1280px;
+    max-height: 800px;
     background: #000;
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.2);
     touch-action: none;
 }
 
@@ -74,8 +80,13 @@ body {
     border: 2px solid #333;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
-    max-width: 400px;
+    max-width: 450px;
     width: 90%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Typography */
@@ -152,7 +163,7 @@ body {
 }
 
 .hud-timer {
-    position: absolute;
+    position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
@@ -161,6 +172,7 @@ body {
     border-radius: 20px;
     border: 2px solid #ff6b35;
     box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+    z-index: 1000;
 }
 
 #timeDisplay {
@@ -171,10 +183,11 @@ body {
 }
 
 .hud-controls {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1000;
 }
 
 .controls-hint {
@@ -189,25 +202,33 @@ body {
 .victory-title {
     font-size: 2.5rem;
     color: #4ade80;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+    text-align: center;
+    line-height: 1.2;
 }
 
 .victory-text, .victory-time {
     color: #a3e635;
     margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
 }
 
 .defeat-title {
     font-size: 2.5rem;
     color: #ef4444;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     text-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    text-align: center;
+    line-height: 1.2;
 }
 
 .defeat-text {
     color: #fca5a5;
     margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
 }
 
 /* Difficulty Selection Styles */
@@ -300,7 +321,7 @@ body {
 
 /* HUD Difficulty Display */
 .hud-difficulty {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
     background: rgba(0, 0, 0, 0.8);
@@ -309,6 +330,7 @@ body {
     border: 1px solid #666;
     font-size: 0.9rem;
     color: #ccc;
+    z-index: 1000;
 }
 
 /* Mobile Controls */
