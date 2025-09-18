@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Maze - 影子迷宮</title>
+    <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Main Game Canvas -->
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Game UI Overlay -->
+        <div id="gameUI">
+            <!-- Start Screen -->
+            <div id="startScreen" class="screen active">
+                <div class="screen-content">
+                    <h1 class="game-title">影子迷宮</h1>
+                    <h2 class="game-subtitle">Shadow Maze</h2>
+                    <p class="game-description">Navigate through the dark maze using only the light around you</p>
+                    <button id="startButton" class="game-button">開始遊戲 / Start Game</button>
+                    <button id="muteButton" class="mute-button">🔊</button>
+                </div>
+            </div>
+            
+            <!-- Game HUD -->
+            <div id="gameHUD" class="screen">
+                <div class="hud-timer">
+                    <span id="timeDisplay">60</span>
+                </div>
+                <div class="hud-controls">
+                    <div class="controls-hint">
+                        <span>WASD / Arrow Keys to move</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Victory Screen -->
+            <div id="victoryScreen" class="screen">
+                <div class="screen-content">
+                    <h2 class="victory-title">🎉 Victory! 勝利！</h2>
+                    <p class="victory-text">You found the exit!</p>
+                    <p id="victoryTime" class="victory-time"></p>
+                    <button id="playAgainButton" class="game-button">Play Again / 再玩一次</button>
+                </div>
+            </div>
+            
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen" class="screen">
+                <div class="screen-content">
+                    <h2 class="defeat-title">⏰ Time's Up! 時間到！</h2>
+                    <p class="defeat-text">You couldn't find the exit in time</p>
+                    <button id="tryAgainButton" class="game-button">Try Again / 再試一次</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Touch Controls -->
+        <div id="mobileControls" class="mobile-only">
+            <div class="dpad">
+                <button class="dpad-btn" id="upBtn">↑</button>
+                <div class="dpad-middle">
+                    <button class="dpad-btn" id="leftBtn">←</button>
+                    <button class="dpad-btn" id="rightBtn">→</button>
+                </div>
+                <button class="dpad-btn" id="downBtn">↓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Game Scripts -->
+    <script src="/src/audio.js"></script>
+    <script src="/src/controls.js"></script>
+    <script src="/src/maze.js"></script>
+    <script src="/src/lighting.js"></script>
+    <script src="/src/game.js"></script>
+</body>
+</html>
