@@ -81,7 +81,7 @@ A challenging 2D dark-themed maze game where players navigate through corridors 
 ## 🚀 安裝與執行 Installation & Running
 
 ### 📋 系統需求 System Requirements
-- Node.js 20+
+- Node.js 20+（建議使用 v20.x）
 - 現代瀏覽器（支援HTML5 Canvas）
   - Modern browser with HTML5 Canvas support
 
