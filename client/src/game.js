@@ -19,23 +19,23 @@ class ShadowMazeGame {
             easy: {
                 name: '簡單 / Easy',
                 timeLimit: 90,
-                mazeSizeMultiplier: 0.7,
+                mazeSizeMultiplier: 0.4,
                 lightRadius: 120,
-                playerSpeed: 140
+                playerSpeed: 1
             },
             medium: {
                 name: '中等 / Medium',
                 timeLimit: 60,
-                mazeSizeMultiplier: 1.0,
+                mazeSizeMultiplier: 0.6,
                 lightRadius: 100,
-                playerSpeed: 120
+                playerSpeed: 1
             },
             hard: {
                 name: '困難 / Hard',
                 timeLimit: 40,
-                mazeSizeMultiplier: 1.3,
+                mazeSizeMultiplier: 0.8,
                 lightRadius: 80,
-                playerSpeed: 100
+                playerSpeed: 1
             }
         };
         
@@ -104,10 +104,10 @@ class ShadowMazeGame {
         if (this.mazeHeight % 2 === 0) this.mazeHeight--;
         
         // Minimum and maximum maze size
-        this.mazeWidth = Math.max(this.mazeWidth, 21);
-        this.mazeHeight = Math.max(this.mazeHeight, 15);
-        this.mazeWidth = Math.min(this.mazeWidth, 101);
-        this.mazeHeight = Math.min(this.mazeHeight, 71);
+        this.mazeWidth = Math.max(this.mazeWidth, 15);
+        this.mazeHeight = Math.max(this.mazeHeight, 11);
+        this.mazeWidth = Math.min(this.mazeWidth, 51);
+        this.mazeHeight = Math.min(this.mazeHeight, 31);
     }
     
     /**
@@ -197,7 +197,7 @@ class ShadowMazeGame {
             x: startPos.x * this.cellSize + this.cellSize / 2,
             y: startPos.y * this.cellSize + this.cellSize / 2,
             radius: 8,
-            speed: difficulty.playerSpeed,
+            speed: difficulty.playerSpeed, // pixels per frame
             lightRadius: difficulty.lightRadius
         };
         
@@ -297,35 +297,50 @@ class ShadowMazeGame {
      * Update player position and handle collisions
      */
     updatePlayer(deltaTime) {
-        const moveSpeed = this.player.speed * deltaTime;
+        const moveSpeed = this.player.speed; // pixels per frame
         let newX = this.player.x;
         let newY = this.player.y;
+        let hasMoved = false;
         
-        // Get input from controls
-        if (this.controls.isPressed('up') || this.controls.isPressed('KeyW')) {
-            newY -= moveSpeed;
-        }
-        if (this.controls.isPressed('down') || this.controls.isPressed('KeyS')) {
-            newY += moveSpeed;
-        }
-        if (this.controls.isPressed('left') || this.controls.isPressed('KeyA')) {
-            newX -= moveSpeed;
-        }
-        if (this.controls.isPressed('right') || this.controls.isPressed('KeyD')) {
-            newX += moveSpeed;
-        }
-        
-        // Check collision with maze walls
-        if (this.canMoveTo(newX, newY)) {
-            // Play movement sound occasionally
-            if (newX !== this.player.x || newY !== this.player.y) {
-                if (Math.random() < 0.02) { // 2% chance per frame
-                    this.audio.playSound('hit', 0.1);
-                }
+        // Get input from controls - move exactly 1 pixel per frame for smooth movement
+        if (this.controls.isPressed('up')) {
+            const testY = newY - moveSpeed;
+            if (this.canMoveTo(newX, testY)) {
+                newY = testY;
+                hasMoved = true;
             }
-            
+        }
+        if (this.controls.isPressed('down')) {
+            const testY = newY + moveSpeed;
+            if (this.canMoveTo(newX, testY)) {
+                newY = testY;
+                hasMoved = true;
+            }
+        }
+        if (this.controls.isPressed('left')) {
+            const testX = newX - moveSpeed;
+            if (this.canMoveTo(testX, newY)) {
+                newX = testX;
+                hasMoved = true;
+            }
+        }
+        if (this.controls.isPressed('right')) {
+            const testX = newX + moveSpeed;
+            if (this.canMoveTo(testX, newY)) {
+                newX = testX;
+                hasMoved = true;
+            }
+        }
+        
+        // Update player position
+        if (hasMoved) {
             this.player.x = newX;
             this.player.y = newY;
+            
+            // Play movement sound occasionally
+            if (Math.random() < 0.02) { // 2% chance per frame
+                this.audio.playSound('hit', 0.1);
+            }
         }
     }
     
