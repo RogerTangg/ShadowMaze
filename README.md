@@ -87,13 +87,15 @@ A challenging 2D dark-themed maze game where players navigate through corridors 
 
 ### ⚙️ 安裝步驟 Installation Steps
 ```bash
-# 1. 安裝依賴 Install dependencies
+# 1. 開啟命令提示字元，並 CD 至專案資料夾
+
+# 2. 安裝依賴 Install dependencies
 npm install
 
-# 2. 啟動開發伺服器 Start development server  
+# 3. 啟動開發伺服器 Start development server  
 npm run dev
 
-# 3. 開啟瀏覽器訪問 Open browser and visit
+# 4. 開啟瀏覽器訪問 Open browser and visit
 # http://localhost:5000
 ```
 
