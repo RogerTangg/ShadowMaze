@@ -17,11 +17,11 @@ class ShadowMazeGame {
         // Movement state
         this.isMoving = false;
         this.moveStartTime = 0;
-        this.moveDuration = 200; // milliseconds for smooth movement
+        this.moveDuration = 120; // milliseconds for smooth movement
         this.moveStartPos = { x: 0, y: 0 };
         this.moveTargetPos = { x: 0, y: 0 };
         this.lastInputTime = 0;
-        this.inputDelay = 180; // milliseconds between accepting new movement inputs
+        this.inputDelay = 80; // milliseconds between accepting new movement inputs
         
         // Difficulty settings
         this.difficultySettings = {
@@ -30,21 +30,21 @@ class ShadowMazeGame {
                 timeLimit: 90,
                 mazeSizeMultiplier: 0.4,
                 lightRadius: 120,
-                moveDuration: 250 // slower movement for easy
+                moveDuration: 160 // slower movement for easy
             },
             medium: {
                 name: '中等 / Medium',
                 timeLimit: 60,
                 mazeSizeMultiplier: 0.6,
                 lightRadius: 100,
-                moveDuration: 200 // medium movement speed
+                moveDuration: 120 // medium movement speed
             },
             hard: {
                 name: '困難 / Hard',
                 timeLimit: 40,
                 mazeSizeMultiplier: 0.8,
                 lightRadius: 80,
-                moveDuration: 150 // faster movement for hard
+                moveDuration: 90 // faster movement for hard
             }
         };
         
@@ -329,8 +329,10 @@ class ShadowMazeGame {
             const elapsed = currentTime - this.moveStartTime;
             const progress = Math.min(elapsed / this.moveDuration, 1);
             
-            // Use easeOut for smooth deceleration
-            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            // Use smooth easeInOut for very fluid movement
+            const easeProgress = progress < 0.5 
+                ? 2 * progress * progress 
+                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
             
             // Interpolate position
             this.player.x = this.moveStartPos.x + (this.moveTargetPos.x - this.moveStartPos.x) * easeProgress;
@@ -346,8 +348,8 @@ class ShadowMazeGame {
             return; // Don't accept new input while moving
         }
         
-        // Check for new movement input
-        if (currentTime - this.lastInputTime < this.inputDelay) {
+        // Check for new movement input - allow faster input when not moving
+        if (currentTime - this.lastInputTime < this.inputDelay && this.isMoving) {
             return;
         }
         

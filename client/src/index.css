@@ -17,26 +17,30 @@ body {
 }
 
 #gameContainer {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
 #gameCanvas {
     position: relative;
-    width: min(100vw, 100vh * 1.6); /* 16:10 aspect ratio */
-    height: min(100vh, 100vw / 1.6);
-    max-width: 1280px;
-    max-height: 800px;
+    width: min(90vw, 90vh * 1.4); /* 14:10 aspect ratio for better centering */
+    height: min(90vh, 90vw / 1.4);
+    max-width: 1200px;
+    max-height: 750px;
     background: #000;
-    border: 2px solid #333;
-    border-radius: 8px;
-    box-shadow: 0 0 30px rgba(255, 107, 53, 0.2);
+    border: 3px solid #444;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(255, 107, 53, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.5);
     touch-action: none;
+    margin: auto;
 }
 
 /* Game UI Styles */
