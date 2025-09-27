@@ -87,13 +87,15 @@ A challenging 2D dark-themed maze game where players navigate through corridors 
 
 ### ⚙️ 安裝步驟 Installation Steps
 ```bash
-# 1. 安裝依賴 Install dependencies
+# 1. 開啟命令提示字元，並 CD 至專案資料夾
+
+# 2. 安裝依賴 Install dependencies
 npm install
 
-# 2. 啟動開發伺服器 Start development server  
+# 3. 啟動開發伺服器 Start development server  
 npm run dev
 
-# 3. 開啟瀏覽器訪問 Open browser and visit
+# 4. 開啟瀏覽器訪問 Open browser and visit
 # http://localhost:5000
 ```
 
@@ -112,17 +114,17 @@ Navigate through randomly generated mazes using the limited light around your ch
 - **時間管理**: 合理分配探索時間，避免在死路浪費太多時間
   - Time Management: Allocate exploration time wisely, avoid spending too much time in dead ends
 
-## 📝 開發團隊 Development Team
+<!-- ## 📝 開發團隊 Development Team
 
 由Replit Agent開發，專為提供沉浸式迷宮探索體驗而設計。
 
-Developed by Replit Agent, designed specifically to provide an immersive maze exploration experience.
+Developed by Replit Agent, designed specifically to provide an immersive maze exploration experience. -->
 
-## 📄 授權條款 License
+<!-- ## 📄 授權條款 License
 
 本專案僅供學習和娛樂使用。
 This project is for educational and entertainment purposes only.
 
----
+--- -->
 
-🌟 **開始你的迷宮冒險吧！Start your maze adventure now!** 🌟
+<!-- 🌟 **開始你的迷宮冒險吧！Start your maze adventure now!** 🌟 -->
