@@ -3,7 +3,7 @@
  * Handles dynamic lighting, shadow casting, and fog of war
  */
 
-class LightingSystem {
+export class LightingSystem {
     constructor() {
         this.shadowCanvas = null;
         this.shadowCtx = null;

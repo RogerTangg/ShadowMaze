@@ -3,6 +3,11 @@
  * Handles game states, rendering, and game loop
  */
 
+import { GameAudio } from './audio.js';
+import { GameControls } from './controls.js';
+import { LightingSystem } from './lighting.js';
+import { MazeGenerator } from './maze.js';
+
 class ShadowMazeGame {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');

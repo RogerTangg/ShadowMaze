@@ -3,7 +3,7 @@
  * Creates a perfect maze with exactly one path between any two points
  */
 
-class MazeGenerator {
+export class MazeGenerator {
     constructor(width, height) {
         this.width = width;
         this.height = height;

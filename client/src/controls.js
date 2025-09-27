@@ -3,7 +3,7 @@
  * Handles keyboard and touch input for player movement
  */
 
-class GameControls {
+export class GameControls {
     constructor() {
         this.keys = {};
         this.touchControls = {

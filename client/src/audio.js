@@ -3,7 +3,7 @@
  * Handles background music and sound effects
  */
 
-class GameAudio {
+export class GameAudio {
     constructor() {
         this.audioContext = null;
         this.sounds = {};
