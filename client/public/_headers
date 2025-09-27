@@ -1,0 +1,26 @@
+# Audio files
+/sounds/*
+  Content-Type: audio/mpeg
+  Cache-Control: public, max-age=31536000
+
+# GLTF files
+/geometries/*
+  Content-Type: model/gltf+json
+  Cache-Control: public, max-age=31536000
+
+# JavaScript files
+/src/*
+  Content-Type: text/javascript
+  Cache-Control: public, max-age=31536000
+
+# CSS files
+*.css
+  Content-Type: text/css
+  Cache-Control: public, max-age=31536000
+
+# Static assets
+/textures/*
+  Cache-Control: public, max-age=31536000
+
+/fonts/*
+  Cache-Control: public, max-age=31536000

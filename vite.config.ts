@@ -24,7 +24,16 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "client", "index.html")
+      }
+    },
   },
+  // Configure base path for deployment
+  base: "/",
+  // Configure public directory
+  publicDir: path.resolve(__dirname, "client", "public"),
   // Add support for large models and audio files
   assetsInclude: ["**/*.gltf", "**/*.glb", "**/*.mp3", "**/*.ogg", "**/*.wav"],
 });

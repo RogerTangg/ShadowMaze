@@ -260,5 +260,5 @@ class GameAudio {
         if (this.audioContext && this.audioContext.state !== 'closed') {
             this.audioContext.close();
         }
-    }
+    } 
 }
